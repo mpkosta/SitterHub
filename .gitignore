@@ -1,0 +1,14 @@
+# Security (CRITICAL)
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Django
+db.sqlite3
+media/
+
+# PyCharm / IDE
+.idea/
+venv/
