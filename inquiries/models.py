@@ -22,7 +22,7 @@ class Inquiry(models.Model):
         related_name='inquiries',
     )
     message = models.TextField(
-        help_text='Кратко съобщение към нашата бавачка',
+        help_text='Кратко съобщение към нашия детегледач',
     )
     created_at = models.DateTimeField(auto_now_add=True)
 

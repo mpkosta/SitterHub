@@ -21,4 +21,4 @@ class Sitter(models.Model):
         upload_to='sitters_photos')
 
     def __str__(self):
-        return self.full_name
+        return f"{self.sitter_first_name}{self.sitter_last_name}"
