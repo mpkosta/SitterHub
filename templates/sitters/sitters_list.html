@@ -1,0 +1,77 @@
+{% extends 'shared/base.html' %}
+
+{% block title %}Нашият екип | Агенция Гледачи{% endblock %}
+
+{% block content %}
+
+<div class="text-center mb-5">
+    <h1 class="mb-3">Запознай се с нашите професионалисти</h1>
+    <div class="btn-group" role="group">
+        <a href="{% url 'sitters-list' %}" class="btn btn-outline-primary">Show All</a>
+
+        {% for cat in categories %}
+            <a href="{% url 'sitters-list' %}?category_slug={{ cat.slug }}" class="btn btn-outline-primary">
+                {{ cat.name }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for sitter in sitters %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if sitter.photo %}
+                <img src="{{ sitter.photo.url }}" class="card-img-top" alt="{{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}" style="height: 300px; object-fit: cover;">
+            {% else %}
+                <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
+                    No Photo
+                </div>
+            {% endif %}
+
+            <div class="card-body">
+                <h5 class="card-title">{{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}</h5>
+
+                <div class="mb-2">
+                    {% for service in sitter.services.all %}
+                        <span class="badge bg-info text-dark">{{ service.name }}</span>
+                    {% endfor %}
+                </div>
+
+                <p class="card-text text-muted">{{ sitter.bio|truncatewords:20 }}</p>
+
+                <ul class="list-unstyled">
+                    <li><strong>Опит:</strong> {{ sitter.experience }} години</li>
+                    <li><strong>Цена:</strong> ${{ sitter.hourly_rate }}/ на час</li>
+                </ul>
+            </div>
+
+            <div class="card-footer bg-white border-top-0 pb-3">
+                <a href="{% url 'inquiry-create' sitter.id %}" class="btn btn-primary w-100">
+                    Изпрати запитване
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <div class="col-12 text-center">
+            <p>Няма намерени гледачи в тази категория.</p>
+        </div>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<div class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+
+{% endblock %}

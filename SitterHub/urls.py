@@ -5,6 +5,8 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('common.urls')),
+    path('sitters/', include('sitters.urls')),
+    path('inquiry/', include('inquiries.urls')),
 ]
 
 if settings.DEBUG:

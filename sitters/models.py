@@ -18,7 +18,9 @@ class Sitter(models.Model):
         max_digits=4,
         decimal_places=2)
     photo = models.ImageField(
-        upload_to='sitters_photos')
+        upload_to='sitters_photos',
+        blank=True,
+        null=True)
 
     def __str__(self):
-        return f"{self.sitter_first_name}{self.sitter_last_name}"
+        return f"{self.sitter_first_name} {self.sitter_last_name}"

@@ -1,0 +1,24 @@
+{% extends 'shared/base.html' %}
+{% block title %}Запитване | SitterHub{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Запитване за {{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}</h4>
+            </div>
+            <div class="card-body">
+                <p>Моля, попълнете формата по-долу, за да се свържем с вас относно този гледач.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-success">Изпрати запитване</button>
+                        <a href="{% url 'sitters-list' %}" class="btn btn-link text-muted mt-2">Отказ</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
