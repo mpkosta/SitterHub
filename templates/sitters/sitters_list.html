@@ -7,10 +7,10 @@
 <div class="text-center mb-5">
     <h1 class="mb-3">Запознай се с нашите професионалисти</h1>
     <div class="btn-group" role="group">
-        <a href="{% url 'sitters-list' %}" class="btn btn-outline-primary">Show All</a>
+        <a href="{% url 'sitters-list' %}" class="btn btn-outline-primary">Разгледай всички гледачи</a>
 
         {% for cat in categories %}
-            <a href="{% url 'sitters-list' %}?category_slug={{ cat.slug }}" class="btn btn-outline-primary">
+            <a href="{% url 'sitters-list' %}?service_category_slug={{ cat.slug }}" class="btn btn-outline-primary">
                 {{ cat.name }}
             </a>
         {% endfor %}
@@ -32,6 +32,12 @@
             <div class="card-body">
                 <h5 class="card-title">{{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}</h5>
 
+                <h5 class="card-title">
+                    <a href="{% url 'sitter-profile' sitter.pk %}" class="text-decoration-none text-dark custom-hover">
+                        {{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}
+                    </a>
+                </h5>
+
                 <div class="mb-2">
                     {% for service in sitter.services.all %}
                         <span class="badge bg-info text-dark">{{ service.name }}</span>
@@ -42,15 +48,19 @@
 
                 <ul class="list-unstyled">
                     <li><strong>Опит:</strong> {{ sitter.experience }} години</li>
-                    <li><strong>Цена:</strong> ${{ sitter.hourly_rate }}/ на час</li>
+                    <li><strong>Цена:</strong> €{{ sitter.hourly_rate }} / час</li>
                 </ul>
             </div>
 
             <div class="card-footer bg-white border-top-0 pb-3">
-                <a href="{% url 'inquiry-create' sitter.id %}" class="btn btn-primary w-100">
-                    Изпрати запитване
-                </a>
-            </div>
+    <a href="{% url 'sitter-profile' sitter.pk %}" class="btn btn-outline-primary w-100 mb-2">
+        Виж профил
+    </a>
+
+    <a href="{% url 'inquiry-create' sitter.pk %}" class="btn btn-primary w-100">
+        Изпрати запитване
+    </a>
+</div>
         </div>
     </div>
     {% empty %}

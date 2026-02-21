@@ -1,0 +1,21 @@
+{% extends 'shared/base.html' %}
+{% block title %}Потвърди изтриване{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow border-danger">
+            <div class="card-body text-center">
+                <h3 class="text-danger">Сигурни ли сте?</h3>
+                <p>Наистина ли искате да изтриете запитването от <strong>{{ object.client_name }}</strong> за гледач <strong>{{ object.sitter.sitter_first_name }}</strong>?</p>
+                <p class="text-muted">Това действие не може да бъде върнато.</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4">Да, изтрий</button>
+                    <a href="{% url 'inquiry-list' %}" class="btn btn-secondary px-4">Отказ</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

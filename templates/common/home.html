@@ -12,14 +12,14 @@
             <div class="card h-100 p-4">
                 <h3>Трябва ти гледач?</h3>
                 <p>Потърси в нашият списък с гледачи</p>
-                <a href="#" class="btn btn-primary btn-lg">Намери гледач</a>
+                <a href="{% url 'sitters-list' %}" class="btn btn-primary btn-lg px-4 gap-3">Намери гледач</a>
             </div>
         </div>
         <div class="col-md-6">
             <div class="card h-100 p-4">
                 <h3>Търсиш си работа?</h3>
                 <p>Присъедини се към екипа ни</p>
-                <a href="#" class="btn btn-outline-secondary btn-lg">Изпрати кандидатура тук</a>
+                <a href="{% url 'apply' %}" class="btn btn-outline-secondary btn-lg px-4">Кандидатствай тук</a>
             </div>
         </div>
     </div>

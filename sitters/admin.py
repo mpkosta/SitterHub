@@ -9,7 +9,7 @@ class SitterAdmin(admin.ModelAdmin):
         "sitter_first_name",
         "sitter_last_name",
         "hourly_rate",
-        "experience")
+        "experience",)
     search_fields = (
         "sitter_first_name",
         "sitter_last_name")

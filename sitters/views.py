@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Sitter
 from services.models import ServiceGroup
 
@@ -22,3 +22,8 @@ class SitterListView(ListView):
         context = super().get_context_data(**kwargs)
         context["categories"] = ServiceGroup.objects.all()
         return context
+
+class SitterDetailView(DetailView):
+    model = Sitter
+    template_name = "sitters/sitter_profile.html"
+    context_object_name = "sitter"

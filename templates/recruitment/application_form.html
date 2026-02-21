@@ -1,0 +1,41 @@
+{% extends 'shared/base.html' %}
+{% block title %}Кандидатстване | Агенция Гледачи{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow border-0">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">
+                    {% if object %}Редактирай своята кандидатура{% else %}Стани част от екипа ни{% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="text-muted d-block mt-1">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-success w-100 mt-3">
+                        {% if object %}Запази промените{% else %}Изпрати кандидатура{% endif %}
+                    </button>
+                    {% if object %}
+                        <a href="{% url 'application-list' %}" class="btn btn-link text-muted w-100 mt-2">Отказ</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

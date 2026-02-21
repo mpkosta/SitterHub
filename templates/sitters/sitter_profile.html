@@ -1,0 +1,48 @@
+{% extends 'shared/base.html' %}
+{% block title %}Профил: {{ sitter.sitter_first_name }} | SitterHub{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <a href="{% url 'sitters-list' %}" class="btn btn-outline-secondary mb-4">&larr; Обратно към списъка</a>
+    
+    <div class="card shadow border-0">
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if sitter.photo %}
+                    <img src="{{ sitter.photo.url }}" class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="Снимка">
+                {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center h-100 rounded-start" style="min-height: 300px;">
+                        <span class="text-muted">Няма снимка</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-8">
+                <div class="card-body p-5">
+                    <h1 class="card-title text-primary">{{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}</h1>
+                    <h4 class="text-muted mb-4">${{ sitter.hourly_rate }} / час</h4>
+                    
+                    <h5 class="fw-bold mt-4">Умения и Услуги:</h5>
+                    <div class="mb-4">
+                        {% for service in sitter.services.all %}
+                            <span class="badge bg-success fs-6 me-1 mb-1">{{ service.name }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <h5 class="fw-bold">Опит:</h5>
+                    <p class="fs-5">{{ sitter.experience }} години професионален опит.</p>
+                    
+                    <h5 class="fw-bold mt-4">За мен:</h5>
+                    <p class="card-text fs-5" style="line-height: 1.6;">{{ sitter.bio }}</p>
+                    
+                    <div class="mt-5">
+                        <a href="{% url 'inquiry-create' sitter.pk %}" class="btn btn-primary btn-lg px-5 shadow-sm">
+                            Наеми {{ sitter.sitter_first_name }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

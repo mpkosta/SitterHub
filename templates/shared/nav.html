@@ -6,9 +6,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#">Намери гледач</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Присъедини се към нас</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Контакти</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'sitters-list' %}">Намери гледач</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'apply' %}">Присъедини се към нас</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'inquiry-list' %}">Запитвания (Beta/Без профил)</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'application-list' %}">Кандидатури (Beta/Без профил)</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Контакти</a></li>
             </ul>
         </div>
     </div>

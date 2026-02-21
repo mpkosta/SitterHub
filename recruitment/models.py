@@ -20,7 +20,7 @@ class Application(models.Model):
     )
     email = models.EmailField()
     short_bio_introduction = models.TextField(
-        help_text="Разкажи накратко за себе си!"
+        help_text="Разкажете накратко за себе си!"
     )
     application_status = models.CharField(
         max_length=20,
@@ -31,5 +31,5 @@ class Application(models.Model):
         auto_now_add=True)
 
     def __str__(self):
-        return (f"{self.first_name} {self.last_name} submitted an application! "
-                f"Current status - {self.application_status}")
+        return (f"{self.first_name} {self.last_name} изпрати кандидатура "
+                f"Текущ статус - {self.application_status}")
