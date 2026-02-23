@@ -1,23 +1,59 @@
-<footer>
-    <div class="footer-content">
-        <div class="footer-col">
-            <h3>Агенция за гледачи</h3>
-            <p>Вашият доверен партньор за намиране на професионална грижа за най-ценните ви хора.</p>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
+<style>
+    .custom-footer {
+        background: linear-gradient(135deg, #084298 0%, #0d6efd 100%);
+        color: #ffffff;
+    }
+    .custom-footer .footer-link {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    .custom-footer .footer-link:hover {
+        color: #ffffff;
+        text-decoration: underline;
+    }
+    .custom-footer hr {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+</style>
+
+<footer class="custom-footer pt-5 pb-3 mt-auto">
+    <div class="container-fluid px-4 px-lg-5">
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase mb-3 fw-bold">Агенция Гледачи</h5>
+                <p class="small" style="line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+                    Свързваме семейства с доверени и проверени професионалисти за грижа за деца, домашни любимци и възрастни хора. Вашето спокойствие е наш приоритет.
+                </p>
             </div>
+
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase mb-3 fw-bold">Бързи връзки</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{% url 'sitters-list' %}" class="footer-link">Намери гледач</a></li>
+                    <li class="mb-2"><a href="{% url 'about' %}" class="footer-link">За нас</a></li>
+                    <li class="mb-2"><a href="{% url 'apply' %}" class="footer-link">Стани част от екипа</a></li>
+                    <li class="mb-2"><a href="{% url 'contact' %}" class="footer-link">Свържете се с нас</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase mb-3 fw-bold">Контакти</h5>
+                <ul class="list-unstyled small" style="color: rgba(255, 255, 255, 0.9);">
+                    <li class="mb-2"><strong>Адрес:</strong> гр. Русе, България</li>
+                    <li class="mb-2"><strong>Имейл:</strong> contact@sitterhub.bg</li>
+                    <li class="mb-2"><strong>Телефон:</strong> +359 88 XXX XXXX</li>
+                </ul>
+            </div>
+
         </div>
-        <div class="footer-col">
-            <h3>Бързи Връзки</h3>
-            <a href="{% url 'home' %}">Начало</a>
-            <a href="{% url 'about' %}">За нас</a>
+
+        <hr class="mt-2 mb-3">
+
+        <div class="text-center small" style="color: rgba(255, 255, 255, 0.8);">
+            &copy; {% now "Y" %} Агенция Гледачи. Всички права запазени.
         </div>
-        <div class="footer-col">
-            <h3>Контакти</h3>
-            <p><i class="fas fa-phone"></i> +359 884 XXX XXX</p>
-            <p><i class="fas fa-envelope"></i> project@gmail.com</p>
-            <p><i class="fas fa-map-marker-alt"></i> гр. Русе, България</p>
-        </div>
+
     </div>
 </footer>

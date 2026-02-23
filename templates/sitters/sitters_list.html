@@ -32,12 +32,6 @@
             <div class="card-body">
                 <h5 class="card-title">{{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}</h5>
 
-                <h5 class="card-title">
-                    <a href="{% url 'sitter-profile' sitter.pk %}" class="text-decoration-none text-dark custom-hover">
-                        {{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}
-                    </a>
-                </h5>
-
                 <div class="mb-2">
                     {% for service in sitter.services.all %}
                         <span class="badge bg-info text-dark">{{ service.name }}</span>

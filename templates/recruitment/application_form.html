@@ -2,36 +2,35 @@
 {% block title %}Кандидатстване | Агенция Гледачи{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-8">
-        <div class="card shadow border-0">
-            <div class="card-header bg-success text-white">
-                <h3 class="mb-0">
-                    {% if object %}Редактирай своята кандидатура{% else %}Стани част от екипа ни{% endif %}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center py-4 border-0">
+                <h3 class="mb-0 fw-bold">
+                    {% if object %}Редактирай кандидатура{% else %}Стани част от екипа ни{% endif %}
                 </h3>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4 p-md-5">
                 <form method="post">
                     {% csrf_token %}
-                    
                     {% for field in form %}
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">{{ field.label }}</label>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">{{ field.label }}</label>
                             {{ field }}
                             {% if field.help_text %}
                                 <small class="text-muted d-block mt-1">{{ field.help_text }}</small>
                             {% endif %}
                             {% if field.errors %}
-                                <div class="text-danger small">{{ field.errors }}</div>
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
                             {% endif %}
                         </div>
                     {% endfor %}
-                    
-                    <button type="submit" class="btn btn-success w-100 mt-3">
+
+                    <button type="submit" class="btn btn-primary w-100 btn-lg rounded-pill mt-2 fw-bold">
                         {% if object %}Запази промените{% else %}Изпрати кандидатура{% endif %}
                     </button>
                     {% if object %}
-                        <a href="{% url 'application-list' %}" class="btn btn-link text-muted w-100 mt-2">Отказ</a>
+                        <a href="{% url 'application-list' %}" class="btn btn-outline-secondary w-100 rounded-pill mt-3 fw-bold">Отказ</a>
                     {% endif %}
                 </form>
             </div>

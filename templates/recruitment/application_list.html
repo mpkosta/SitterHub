@@ -5,8 +5,7 @@
 <div class="mt-4">
     <h2>Списък с кандидатури</h2>
     <hr>
-    <a href="{% url 'apply' %}" class="btn btn-primary mb-3">Добави нова кандидатура</a>
-    
+    <a href="{% url 'apply' %}" class="btn btn-primary mb-3">Ръчно въвеждане на кандидатура(Beta/само за админски профил при получаване на CV на живо)</a>
     <div class="row g-3">
         {% for app in applications %}
             <div class="col-md-6">

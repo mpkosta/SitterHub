@@ -3,23 +3,60 @@
 {% block title %}Добре дошли | Агенция Гледачи{% endblock %}
 
 {% block content %}
-<div class="p-5 mb-4 bg-light rounded-3 text-center">
-    <h1 class="display-5 fw-bold">Професионална грижа в град Русе</h1>
-    <p class="fs-4">Вашата доверена агенция за гледачи на деца, възрастни и домашни любимци.</p>
-    
-    <div class="row mt-5">
-        <div class="col-md-6">
-            <div class="card h-100 p-4">
-                <h3>Трябва ти гледач?</h3>
-                <p>Потърси в нашият списък с гледачи</p>
-                <a href="{% url 'sitters-list' %}" class="btn btn-primary btn-lg px-4 gap-3">Намери гледач</a>
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border-radius: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        padding: 5rem 2rem;
+        margin-top: 1rem;
+    }
+
+    .service-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        border-radius: 16px;
+        background-color: white;
+    }
+
+    .service-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(13, 110, 253, 0.15) !important;
+    }
+
+    .hero-title {
+        color: #084298;
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .hero-subtitle {
+        color: #3d5a80;
+    }
+</style>
+
+<div class="hero-section text-center mb-5">
+    <h1 class="display-4 hero-title mb-4">Професионална грижа в град Русе</h1>
+    <p class="fs-4 hero-subtitle mb-5">Вашата доверена агенция за гледачи на деца, възрастни и домашни любимци.</p>
+
+    <div class="row g-4 justify-content-center px-lg-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="card service-card h-100 p-5 shadow-sm d-flex flex-column justify-content-center">
+                <h2 class="h3 fw-bold mb-3 text-primary">Трябва ти гледач?</h2>
+                <p class="text-muted mb-4 fs-5">Разгледай нашия списък с внимателно подбрани професионалисти.</p>
+                <div class="mt-auto">
+                    <a href="{% url 'sitters-list' %}" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm">Намери гледач</a>
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card h-100 p-4">
-                <h3>Търсиш си работа?</h3>
-                <p>Присъедини се към екипа ни</p>
-                <a href="{% url 'apply' %}" class="btn btn-outline-secondary btn-lg px-4">Кандидатствай тук</a>
+
+        <div class="col-md-6 col-lg-5">
+            <div class="card service-card h-100 p-5 shadow-sm d-flex flex-column justify-content-center">
+                <h2 class="h3 fw-bold mb-3 text-primary">Търсиш си работа?</h2>
+                <p class="text-muted mb-4 fs-5">Присъедини се към нашия екип и започни да помагаш на семействата.</p>
+                <div class="mt-auto">
+                    <a href="{% url 'apply' %}" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm">Кандидатствай тук</a>
+                </div>
             </div>
         </div>
     </div>

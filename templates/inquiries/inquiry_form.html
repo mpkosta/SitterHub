@@ -1,21 +1,31 @@
 {% extends 'shared/base.html' %}
-{% block title %}Запитване | SitterHub{% endblock %}
+{% block title %}Запитване | Агенция Гледачи{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Запитване за {{ sitter.sitter_first_name }} {{ sitter.sitter_last_name }}</h4>
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center py-4 border-0">
+                <h3 class="mb-0 fw-bold">Запитване за {{ sitter.sitter_first_name }}</h3>
             </div>
-            <div class="card-body">
-                <p>Моля, попълнете формата по-долу, за да се свържем с вас относно този гледач.</p>
+            <div class="card-body p-4 p-md-5">
+                <p class="text-muted text-center mb-4">Моля, попълнете формата по-долу, за да се свържем с вас.</p>
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-success">Изпрати запитване</button>
-                        <a href="{% url 'sitters-list' %}" class="btn btn-link text-muted mt-2">Отказ</a>
-                    </div>
+                    {% for field in form %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="text-muted d-block mt-1">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100 btn-lg rounded-pill mt-2 fw-bold">Изпрати запитване</button>
+                    <a href="{% url 'sitters-list' %}" class="btn btn-outline-secondary w-100 rounded-pill mt-3 fw-bold">Отказ</a>
                 </form>
             </div>
         </div>
