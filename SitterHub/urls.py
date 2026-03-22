@@ -8,6 +8,7 @@ urlpatterns = [
     path('sitters/', include('sitters.urls')),
     path('inquiry/', include('inquiries.urls')),
     path('applications/', include('recruitment.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:

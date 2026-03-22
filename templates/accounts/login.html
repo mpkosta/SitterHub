@@ -1,0 +1,32 @@
+{% extends 'shared/base.html' %}
+{% block title %}Вход | Агенция Гледачи{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center py-4 border-0">
+                <h3 class="mb-0 fw-bold">Вход в системата</h3>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100 btn-lg rounded-pill mt-2 fw-bold">Влез</button>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">Нямате профил? <a href="{% url 'registration' %}">Регистрирайте се</a>.</small>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

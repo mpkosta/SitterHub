@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from sitters.models import Sitter
 
 class Application(models.Model):
     APPLICATION_STATUS_CHOICES = [
@@ -33,3 +36,19 @@ class Application(models.Model):
     def __str__(self):
         return (f"{self.first_name} {self.last_name} изпрати кандидатура "
                 f"Текущ статус - {self.application_status}")
+
+@receiver(post_save, sender=Application)
+def create_sitter_on_hire(sender, instance, created, **kwargs):
+    if instance.application_status == 'hired':
+        sitter_exists = Sitter.objects.filter(
+            sitter_first_name=instance.first_name,
+            sitter_last_name=instance.last_name
+        ).exists()
+
+        if not sitter_exists:
+            Sitter.objects.create(
+                sitter_first_name=instance.first_name,
+                sitter_last_name=instance.last_name,
+                bio=instance.short_bio_introduction,
+                hourly_rate=10.00
+            )

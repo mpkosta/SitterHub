@@ -28,9 +28,21 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'sitters-list' %}">Намери гледач</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">За нас</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'apply' %}">Присъедини се към нас</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'inquiry-list' %}">Запитвания (Beta/Без профил)</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'application-list' %}">Кандидатури (Beta/Без профил)</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Свържете се с нас</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'inquiry-list' %}">Запитвания</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'application-list' %}">Кандидатури</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Контакти</a></li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link" style="text-decoration: none;">Изход</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'registration' %}">Регистрация</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

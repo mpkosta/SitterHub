@@ -19,14 +19,23 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+LOGIN_REDIRECT_URL = 'home'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailOrUsernameBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 
 PROJECT_APPS = [
     'common',
     'inquiries',
     'recruitment',
     'services',
-    'sitters'
+    'sitters',
+    'accounts'
 ]
 
 INSTALLED_APPS = [
