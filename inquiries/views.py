@@ -1,55 +1,68 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
-from .forms import InquiryForm
-from sitters.models import Sitter
-from .models import Inquiry
-from django.views.generic import ListView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import InquiryForm
+from .models import Inquiry
+from sitters.models import Sitter
 
 
-def create_inquiry(request, sitter_id):
-    sitter = get_object_or_404(Sitter, pk=sitter_id)
+class InquiryCreateView(LoginRequiredMixin, CreateView):
+    model = Inquiry
+    form_class = InquiryForm
+    template_name = 'inquiries/inquiry_form.html'
+    success_url = reverse_lazy('inquiry-list')
 
-    if request.method == 'POST':
-        form = InquiryForm(request.POST)
-        if form.is_valid():
-            inquiry = form.save(commit=False)
-            inquiry.sitter = sitter
-            inquiry.save()
-            messages.success(
-                request,
-                f"Успешно изпратихте запитване за {sitter.sitter_first_name} "
-                f"{sitter.sitter_last_name}!")
-            return redirect("sitters-list")
-    else:
-        form = InquiryForm()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sitter'] = get_object_or_404(Sitter, pk=self.kwargs.get('sitter_id'))
+        return context
 
-    context = {
-        "sitter": sitter,
-        "form": form,
-    }
+    def form_valid(self, form):
+        sitter = get_object_or_404(Sitter, pk=self.kwargs.get('sitter_id'))
+        form.instance.sitter = sitter
+        form.instance.user = self.request.user
 
-    return render(request, 'inquiries/inquiry_form.html', context)
+        messages.success(
+            self.request,
+            f"Успешно изпратихте запитване за {sitter.sitter_first_name} {sitter.sitter_last_name}!"
+        )
+        return super().form_valid(form)
 
 
-class InquiryListView(ListView):
+class InquiryListView(LoginRequiredMixin, ListView):
     model = Inquiry
     template_name = "inquiries/inquiry_list.html"
     context_object_name = "inquiries"
-    ordering = "-created_at",
     paginate_by = 10
 
+    def get_queryset(self):
+        return Inquiry.objects.filter(user=self.request.user).order_by("-created_at")
 
-class InquiryUpdateView(UpdateView):
+
+class InquiryUpdateView(LoginRequiredMixin, UpdateView):
     model = Inquiry
     form_class = InquiryForm
     template_name = "inquiries/inquiry_form.html"
+    success_url = reverse_lazy("inquiry-list")
 
-    def get_success_url(self):
-        return reverse_lazy("inquiry-list")
+    def get_queryset(self):
+        return Inquiry.objects.filter(user=self.request.user)
+
+    def form_valid(self, form):
+        messages.success(self.request, "Запитването е обновено успешно!")
+        return super().form_valid(form)
 
 
-class InquiryDeleteView(DeleteView):
+class InquiryDeleteView(LoginRequiredMixin, DeleteView):
     model = Inquiry
     template_name = "inquiries/inquiry_delete.html"
     success_url = reverse_lazy("inquiry-list")
+
+    def get_queryset(self):
+        return Inquiry.objects.filter(user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Запитването беше изтрито успешно!")
+        return super().delete(request, *args, **kwargs)

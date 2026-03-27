@@ -33,4 +33,4 @@ class Inquiry(models.Model):
 
     def __str__(self):
         return (f"{self.client_first_name} {self.client_last_name} is inquiring  about "
-                f"{self.sitter.first_name}")
+                f"{self.sitter.sitter_first_name}")

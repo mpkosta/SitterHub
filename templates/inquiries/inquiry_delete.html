@@ -6,7 +6,7 @@
         <div class="card shadow border-danger">
             <div class="card-body text-center">
                 <h3 class="text-danger">Сигурни ли сте?</h3>
-                <p>Наистина ли искате да изтриете запитването от <strong>{{ object.client_name }}</strong> за гледач <strong>{{ object.sitter.sitter_first_name }}</strong>?</p>
+                <p>Наистина ли искате да изтриете запитването от <strong>{{ object.client_first_name }} {{ object.client_last_name }}</strong> за гледач <strong>{{ object.sitter.sitter_first_name }}</strong>?</p>
                 <p class="text-muted">Това действие не може да бъде върнато.</p>
                 
                 <form method="post">

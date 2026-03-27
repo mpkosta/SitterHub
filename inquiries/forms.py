@@ -7,6 +7,7 @@ class InquiryForm(forms.ModelForm):
         fields = [
             "client_first_name",
             "client_last_name",
+            "client_phone",
             "client_email",
             "message"
         ]

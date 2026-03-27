@@ -1,7 +1,7 @@
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from .models import Application
 from .forms import ApplicationForm, ApplicationEditForm
 
@@ -9,9 +9,11 @@ class ApplicationCreateView(CreateView):
     model = Application
     form_class = ApplicationForm
     template_name = "recruitment/application_form.html"
-    success_url = reverse_lazy("application-list")
+    success_url = reverse_lazy("home")
 
     def form_valid(self, form):
+        form.instance.user = self.request.user
+
         messages.success(
             self.request,
             "Вашата кандидатура е изпратена успешно! Очаквайте отговор до няколко часа."

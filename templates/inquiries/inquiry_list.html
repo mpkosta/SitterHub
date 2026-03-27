@@ -9,7 +9,7 @@
             <div class="list-group-item d-flex justify-content-between align-items-center mb-2 shadow-sm">
                 <div>
                     <h5 class="mb-1">Запитване за: {{ inquiry.sitter.sitter_first_name }}</h5>
-                    <p class="mb-1">От: {{ inquiry.client_name }} ({{ inquiry.client_phone }})</p>
+                    <p class="mb-1">От: {{ inquiry.client_first_name }} {{ inquiry.client_last_name }} ({{ inquiry.client_phone }})</p>
                     <small class="text-muted">{{ inquiry.created_at|date:"d M Y" }}</small>
                 </div>
                 <div>
