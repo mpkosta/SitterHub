@@ -2,6 +2,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from sitters.models import Sitter
+from django.contrib.auth import get_user_model
+
+UserModel = get_user_model()
 
 class Application(models.Model):
     APPLICATION_STATUS_CHOICES = [
@@ -10,6 +13,12 @@ class Application(models.Model):
         ('rejected', 'Rejected'),
         ('hired', 'Hired'),
     ]
+
+    user = models.ForeignKey(
+        UserModel,
+        on_delete=models.CASCADE,
+        related_name='applications',
+    )
 
     first_name = models.CharField(
         max_length=50,
@@ -41,12 +50,12 @@ class Application(models.Model):
 def create_sitter_on_hire(sender, instance, created, **kwargs):
     if instance.application_status == 'hired':
         sitter_exists = Sitter.objects.filter(
-            sitter_first_name=instance.first_name,
-            sitter_last_name=instance.last_name
+            user=instance.user
         ).exists()
 
         if not sitter_exists:
             Sitter.objects.create(
+                user=instance.user,
                 sitter_first_name=instance.first_name,
                 sitter_last_name=instance.last_name,
                 bio=instance.short_bio_introduction,

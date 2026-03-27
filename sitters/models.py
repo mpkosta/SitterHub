@@ -1,7 +1,16 @@
 from django.db import models
 from services.models import ServiceGroup
+from django.contrib.auth import get_user_model
+
+UserModel = get_user_model()
 
 class Sitter(models.Model):
+    user = models.OneToOneField(
+        UserModel,
+        on_delete=models.CASCADE,
+        related_name='sitter_profile'
+    )
+
     sitter_first_name = models.CharField(
         max_length=50
     )

@@ -1,11 +1,16 @@
 from django.db import models
-
 from sitters.models import Sitter
+from django.contrib.auth import get_user_model
 
-
-# Create your models here.
+UserModel = get_user_model()
 
 class Inquiry(models.Model):
+    user = models.ForeignKey(
+        UserModel,
+        on_delete=models.CASCADE,
+        related_name='inquiries_sent',
+    )
+
     client_first_name = models.CharField(
         max_length=50)
     client_last_name = models.CharField(
