@@ -35,7 +35,8 @@ PROJECT_APPS = [
     'recruitment',
     'services',
     'sitters',
-    'accounts'
+    'accounts',
+    'rest_framework',
 ]
 
 INSTALLED_APPS = [
