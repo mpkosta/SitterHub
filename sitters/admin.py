@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import Sitter
+from .models import Sitter, Language
 
 
-# Register your models here.
 @admin.register(Sitter)
 class SitterAdmin(admin.ModelAdmin):
     list_display = (
@@ -13,4 +12,11 @@ class SitterAdmin(admin.ModelAdmin):
     search_fields = (
         "sitter_first_name",
         "sitter_last_name")
-    filter_horizontal = ("services",)
+    filter_horizontal = (
+        "services",
+        "languages")
+
+@admin.register(Language)
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ("language_name",)
+    search_fields = ("language_name",)

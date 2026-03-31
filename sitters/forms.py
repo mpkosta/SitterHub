@@ -12,13 +12,15 @@ class SitterProfileUpdateForm(forms.ModelForm):
             'services',
             'experience',
             'hourly_rate',
-            'photo'
+            'photo',
+            'languages'
         ]
 
         labels = {
             'sitter_first_name': 'Име',
             'sitter_last_name': 'Фамилия',
             'bio': 'За мен (Био)',
+            'languages': 'Говорими езици',
             'services': 'Предлагани услуги',
             'experience': 'Опит (в години)',
             'hourly_rate': 'Часова ставка (лв/ч)',
@@ -36,6 +38,7 @@ class SitterProfileUpdateForm(forms.ModelForm):
                 attrs={'class': 'form-control',
                        'rows': 5,
                        'placeholder': 'Разкажете за вас'}),
+            'languages': forms.CheckboxSelectMultiple(),
             'experience': forms.NumberInput(
                 attrs={'class': 'form-control',
                        'placeholder': 'Години опит(въведете 0 ако е по-малко от година)'}),

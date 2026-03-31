@@ -28,6 +28,15 @@
                             <span class="badge bg-success fs-6 me-1 mb-1">{{ service.name }}</span>
                         {% endfor %}
                     </div>
+
+                    <h5 class="fw-bold mt-4">Говорими езици:</h5>
+                    <div class="mb-4">
+                        {% for language in sitter.languages.all %}
+                            <span class="badge bg-info text-dark fs-6 me-1 mb-1">{{ language.language_name }}</span>
+                        {% empty %}
+                            <span class="text-muted">Не са посочени езици.</span>
+                        {% endfor %}
+                    </div>
                     
                     <h5 class="fw-bold">Опит:</h5>
                     <p class="fs-5">{{ sitter.experience }} години професионален опит.</p>

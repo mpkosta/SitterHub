@@ -4,6 +4,14 @@ from django.contrib.auth import get_user_model
 
 UserModel = get_user_model()
 
+class Language(models.Model):
+    language_name = models.CharField(
+        max_length=50,
+        unique=True)
+
+    def __str__(self):
+        return self.language_name
+
 class Sitter(models.Model):
     user = models.OneToOneField(
         UserModel,
@@ -30,6 +38,11 @@ class Sitter(models.Model):
         upload_to='sitters_photos',
         blank=True,
         null=True)
+    languages = models.ManyToManyField(
+        Language,
+        related_name='sitters',
+        blank=True
+    )
 
     def __str__(self):
         return f"{self.sitter_first_name} {self.sitter_last_name}"
