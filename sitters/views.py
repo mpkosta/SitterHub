@@ -1,10 +1,10 @@
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 from .models import Sitter
 from services.models import ServiceGroup
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .forms import SitterProfileUpdateForm
+from .forms import SitterProfileUpdateForm, SitterCreateAdminForm
 
 class SitterListView(ListView):
     model = Sitter
@@ -47,4 +47,20 @@ class SitterUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         messages.success(self.request, "Профилът ви беше обновен успешно!")
+        return super().form_valid(form)
+
+
+class SitterCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Sitter
+    form_class = SitterCreateAdminForm
+    template_name = 'sitters/sitter_form.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_success_url(self):
+        return reverse_lazy('sitters-list')
+
+    def form_valid(self, form):
+        messages.success(self.request, "Гледачът беше добавен успешно в системата!")
         return super().form_valid(form)

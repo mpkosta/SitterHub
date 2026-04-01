@@ -1,6 +1,8 @@
 from django import forms
 from .models import Sitter
+from django.contrib.auth import get_user_model
 
+UserModel = get_user_model()
 
 class SitterProfileUpdateForm(forms.ModelForm):
     class Meta:
@@ -74,3 +76,18 @@ class SitterProfileUpdateForm(forms.ModelForm):
             self.add_error("bio", "Моля, въведете по-подробно описание (минимум 30 символа).")
 
         return cleaned_data
+
+class SitterCreateAdminForm(SitterProfileUpdateForm):
+    class Meta(SitterProfileUpdateForm.Meta):
+        fields = ['user'] + SitterProfileUpdateForm.Meta.fields
+        labels = {
+            **SitterProfileUpdateForm.Meta.labels,
+            'user': 'Избери потребителски акаунт',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user'].queryset = UserModel.objects.filter(sitter_profile__isnull=True)
+        self.fields['user'].widget.attrs.update({'class': 'form-select'})
+        self.fields['hourly_rate'].disabled = False
+        self.fields['hourly_rate'].help_text = "Въведете стартова часова ставка."

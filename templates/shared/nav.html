@@ -15,6 +15,10 @@
     .custom-navbar .nav-link:hover {
         opacity: 0.8;
     }
+    .user-greeting {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.95rem;
+    }
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark custom-navbar mb-4">
@@ -33,9 +37,11 @@
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'inquiry-list' %}">Запитвания</a></li>
 
-                    {% if user.is_staff %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'application-list' %}">Кандидатури</a></li>
-                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'application-list' %}">
+                            {% if user.is_staff %}Кандидатури (HR){% else %}Моите кандидатури{% endif %}
+                        </a>
+                    </li>
 
                     {% if request.user.sitter_profile %}
                         <li class="nav-item">
@@ -45,7 +51,11 @@
                         </li>
                     {% endif %}
 
-                    <li class="nav-item ms-2">
+                    <li class="nav-item ms-lg-3 d-none d-lg-flex align-items-center">
+                        <span class="user-greeting fw-bold border-start ps-3 py-1">Здравей, {{ user.username }}</span>
+                    </li>
+
+                    <li class="nav-item ms-1">
                         <form method="post" action="{% url 'logout' %}" class="d-inline m-0 p-0">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-link nav-link" style="text-decoration: none;">Изход</button>
