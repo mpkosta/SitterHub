@@ -1,0 +1,13 @@
+{% extends 'shared/base.html' %}
+{% block title %}Невалидна заявка | Агенция Гледачи{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center vh-100 text-center">
+    <div>
+        <h1 class="display-1 fw-bold text-secondary">400</h1>
+        <h2 class="mb-4">Невалидна заявка.</h2>
+        <p class="fs-5 text-muted mb-4">Сървърът не може да разбере или обработи вашата заявка.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary btn-lg">Върни се в началото</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'shared/base.html' %}
+{% block title %}Достъпът е отказан | Агенция Гледачи{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center vh-100 text-center">
+    <div>
+        <h1 class="display-1 fw-bold text-warning">403</h1>
+        <h2 class="mb-4">Достъпът е отказан.</h2>
+        <p class="fs-5 text-muted mb-4">Нямате необходимите права, за да разгледате тази страница.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary btn-lg">Върни се в началото</a>
+    </div>
+</div>
+{% endblock %}
