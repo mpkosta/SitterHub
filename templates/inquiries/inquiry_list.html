@@ -6,19 +6,32 @@
     <hr>
     <div class="list-group">
         {% for inquiry in inquiries %}
-            <div class="list-group-item d-flex justify-content-between align-items-center mb-2 shadow-sm">
+            <div class="list-group-item d-flex justify-content-between align-items-center mb-2 shadow-sm {% if request.user != inquiry.user %}border-start border-success border-4{% endif %}">
                 <div>
-                    <h5 class="mb-1">Запитване за: {{ inquiry.sitter.sitter_first_name }}</h5>
+                    {% if request.user == inquiry.user %}
+                        <span class="badge bg-secondary mb-2">Изпратено от мен</span>
+                    {% else %}
+                        <span class="badge bg-success mb-2">Ново! Получено за мен</span>
+                    {% endif %}
+
+                    <h5 class="mb-1">Запитване за: {{ inquiry.sitter.sitter_first_name }} {{ inquiry.sitter.sitter_last_name }}</h5>
                     <p class="mb-1">От: {{ inquiry.client_first_name }} {{ inquiry.client_last_name }} ({{ inquiry.client_phone }})</p>
-                    <small class="text-muted">{{ inquiry.created_at|date:"d M Y" }}</small>
+                    <small class="text-muted">{{ inquiry.created_at|date:"d M Y, H:i" }}</small>
+
+                    {% if request.user != inquiry.user %}
+                        <div class="mt-2 text-primary fw-bold">Съобщение:</div>
+                        <p class="mb-1 fst-italic">"{{ inquiry.message }}"</p>
+                    {% endif %}
                 </div>
                 <div>
-                    <a href="{% url 'inquiry-edit' inquiry.pk %}" class="btn btn-warning btn-sm">Редактирай</a>
-                    <a href="{% url 'inquiry-delete' inquiry.pk %}" class="btn btn-danger btn-sm">Изтрий</a>
+                    {% if request.user == inquiry.user %}
+                        <a href="{% url 'inquiry-edit' inquiry.pk %}" class="btn btn-warning btn-sm">Редактирай</a>
+                        <a href="{% url 'inquiry-delete' inquiry.pk %}" class="btn btn-danger btn-sm">Оттегли</a>
+                    {% endif %}
                 </div>
             </div>
         {% empty %}
-            <p>Нямате направени запитвания.</p>
+            <p class="text-muted">Нямате намерени запитвания.</p>
         {% endfor %}
     </div>
 </div>

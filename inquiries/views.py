@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import InquiryForm
 from .models import Inquiry
 from sitters.models import Sitter
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class InquiryCreateView(LoginRequiredMixin, CreateView):
@@ -38,7 +40,16 @@ class InquiryListView(LoginRequiredMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Inquiry.objects.filter(user=self.request.user).order_by("-created_at")
+        user = self.request.user
+        queryset = Inquiry.objects.filter(user=user)
+
+        try:
+            if hasattr(user, 'sitter_profile'):
+                queryset = queryset | Inquiry.objects.filter(sitter=user.sitter_profile)
+        except ObjectDoesNotExist:
+            pass
+
+        return queryset.order_by("-created_at").distinct()
 
 
 class InquiryUpdateView(LoginRequiredMixin, UpdateView):
