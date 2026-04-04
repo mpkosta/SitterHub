@@ -47,14 +47,20 @@
             </div>
 
             <div class="card-footer bg-white border-top-0 pb-3">
-    <a href="{% url 'sitter-profile' sitter.pk %}" class="btn btn-outline-primary w-100 mb-2">
-        Виж профил
-    </a>
+                <a href="{% url 'sitter-profile' sitter.pk %}" class="btn btn-outline-primary w-100 mb-2">
+                    Виж профил
+                </a>
 
-    <a href="{% url 'inquiry-create' sitter.pk %}" class="btn btn-primary w-100">
-        Изпрати запитване
-    </a>
-</div>
+                <a href="{% url 'inquiry-create' sitter.pk %}" class="btn btn-primary w-100 mb-2">
+                    Изпрати запитване
+                </a>
+
+                {% if request.user.is_staff %}
+                <a href="{% url 'sitter-delete' sitter.pk %}" class="btn btn-danger w-100">
+                    Изтрий Гледач
+                </a>
+                {% endif %}
+            </div>
         </div>
     </div>
     {% empty %}

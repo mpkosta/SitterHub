@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from .models import Sitter
 from services.models import ServiceGroup
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -32,7 +32,6 @@ class SitterDetailView(DetailView):
     template_name = "sitters/sitter_profile.html"
     context_object_name = "sitter"
 
-
 class SitterUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Sitter
     form_class = SitterProfileUpdateForm
@@ -49,7 +48,6 @@ class SitterUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         messages.success(self.request, "Профилът ви беше обновен успешно!")
         return super().form_valid(form)
 
-
 class SitterCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Sitter
     form_class = SitterCreateAdminForm
@@ -63,4 +61,16 @@ class SitterCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         messages.success(self.request, "Гледачът беше добавен успешно в системата!")
+        return super().form_valid(form)
+
+class SitterDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Sitter
+    template_name = "sitters/sitter_delete.html"
+    success_url = reverse_lazy("sitters-list")
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
+        messages.success(self.request, "Профилът на гледача беше изтрит успешно!")
         return super().form_valid(form)

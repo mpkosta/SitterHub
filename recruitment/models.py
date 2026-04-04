@@ -48,10 +48,13 @@ class Application(models.Model):
 
 @receiver(post_save, sender=Application)
 def create_sitter_on_hire(sender, instance, created, **kwargs):
+    """
+    Creates a sitter if status is 'hired'.
+    The sitter is removed from the sitters_list page if status changed to something else.
+    """
     if instance.application_status == 'hired':
         sitter_exists = Sitter.objects.filter(
-            user=instance.user
-        ).exists()
+            user=instance.user).exists()
 
         if not sitter_exists:
             Sitter.objects.create(
@@ -61,3 +64,6 @@ def create_sitter_on_hire(sender, instance, created, **kwargs):
                 bio=instance.short_bio_introduction,
                 hourly_rate=10.00
             )
+
+    else:
+        Sitter.objects.filter(user=instance.user).delete()
