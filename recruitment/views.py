@@ -4,12 +4,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from .models import Application
 from .forms import ApplicationForm, ApplicationEditForm
+from .tasks import send_status_update_email_task
 
 class ApplicationCreateView(LoginRequiredMixin, CreateView):
     model = Application
     form_class = ApplicationForm
     template_name = "recruitment/application_form.html"
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("application-list")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -38,8 +39,13 @@ class ApplicationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         return self.request.user == obj.user or self.request.user.is_staff
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+
+        if 'application_status' in form.changed_data:
+            send_status_update_email_task.delay(self.object.id)
+
         messages.success(self.request, "Кандидатурата е обновена успешно!")
-        return super().form_valid(form)
+        return response
 
 class ApplicationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Application
