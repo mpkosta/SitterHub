@@ -32,5 +32,5 @@ class Inquiry(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return (f"{self.client_first_name} {self.client_last_name} is inquiring  about "
+        return (f"{self.client_first_name} {self.client_last_name} is inquiring about "
                 f"{self.sitter.sitter_first_name}")
