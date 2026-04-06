@@ -45,7 +45,7 @@
                         </a>
                     </li>
 
-                    {% if request.user|has_group:"Sitter" %}
+                    {% if request.user|has_group:"Sitter" and request.user.sitter_profile %}
                         <li class="nav-item">
                             <a class="nav-link btn btn-warning text-dark px-3 ms-2 fw-bold rounded-pill" href="{% url 'sitter-edit' request.user.sitter_profile.pk %}">
                                 ⚙️ Редактирай профил
