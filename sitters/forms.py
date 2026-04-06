@@ -65,7 +65,7 @@ class SitterProfileUpdateForm(forms.ModelForm):
 
         if self.instance and self.instance.pk:
             existing_langs = self.instance.languages.all()
-            self.fields['languages_input'].initial = ', '.join([lang.name for lang in existing_langs])
+            self.fields['languages_input'].initial = ', '.join([lang.language_name for lang in existing_langs])
 
     def clean(self):
         cleaned_data = super().clean()
