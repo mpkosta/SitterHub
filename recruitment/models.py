@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from sitters.models import Sitter
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 UserModel = get_user_model()
 
@@ -65,5 +66,12 @@ def create_sitter_on_hire(sender, instance, created, **kwargs):
                 hourly_rate=10.00
             )
 
+        sitter_group, created = Group.objects.get_or_create(name='Sitter')
+        instance.user.groups.add(sitter_group)
+
     else:
         Sitter.objects.filter(user=instance.user).delete()
+
+        sitter_group = Group.objects.filter(name='Sitter').first()
+        if sitter_group:
+            instance.user.groups.remove(sitter_group)
