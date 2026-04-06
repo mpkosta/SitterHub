@@ -4,20 +4,36 @@ A Django web application connecting families with trusted local professionals fo
 
 ---
 
-## Table of Contents
+## Live Demo & Ready-to-Test Environment
+**https://sitterhub.onrender.com**
 
+The application is fully deployed and configured. **No local installation, database migrations, or console commands are required.** You can test the entire lifecycle and all critical business logic directly through the frontend UI using the pre-configured accounts below.
+
+---
+
+## Test Accounts
+
+To facilitate immediate testing of the role-based access control (RBAC) and business logic without using the Django Admin panel, the following accounts have been pre-configured in the live production database:
+
+| Role | Username / Email | Password         | Access Level & Frontend Capabilities |
+| :--- | :--- |:-----------------| :--- |
+| **Admin** | `admin` | `softadmin1326`  | **Full UI Access.** Can delete any sitter/inquiry and manage applications directly from the frontend dashboards. Uneditable fields (like hourly rate) are manageable by this role. |
+| **Sitter** | `sitter_test` | `softsitter1326` | **Sitter UI.** Can update their own profile, view received inquiries, but is blocked from deleting other sitters or accessing administrative dashboards. |
+| **Client** | `client_test` | `softclient1326`               | **Client UI.** Can browse sitters, send and edit their own inquiries, and access the client dashboard. |
+
+*Please log in using these credentials to test the full application lifecycle. All administrative actions are intentionally integrated into the main user interface to demonstrate advanced View-level permissions.*
+
+---
+
+## Table of Contents
 - [Project Overview](#project-overview)
 - [Motivation](#motivation)
+- [Advanced Features & Exam Criteria Met](#advanced-features--exam-criteria-met)
 - [Application Architecture](#application-architecture)
 - [Database Design](#database-design)
 - [Features](#features)
-- [Installation](#installation)
-- [Environment Variables](#environment-variables)
-- [Running the Application](#running-the-application)
-- [Usage](#usage)
-- [Testing](#testing)
-- [Contributors](#contributors)
-- [License](#license)
+- [Live Testing Instructions (Step-by-Step)](#live-testing-instructions)
+- [Contributors & License](#contributors)
 
 ---
 
@@ -33,12 +49,8 @@ The application allows users to:
 - View detailed sitter profiles
 - Submit hiring inquiries
 
-In compliance with the Django Basics Regular Exam requirements:
-
-- User authentication and Django User management are intentionally excluded.
-- All CRUD functionality is accessible via a public "Beta" dashboard interface to ensure full evaluation of the business logic.
-
-The project demonstrates Django fundamentals including models, forms, class-based views, function-based views, template inheritance, validation, and PostgreSQL integration.
+The application includes both a public section (accessible without authentication) and a private section (available only to logged-in users with role-based access).
+The project also demonstrates advanced Django fundamentals including custom user models, forms, class-based views (CBVs), RESTful APIs, asynchronous tasks, template inheritance, robust validation, and PostgreSQL integration.
 
 ---
 
@@ -55,22 +67,38 @@ The project reflects real-world business logic implemented using clean code prin
 
 ---
 
+## Advanced Features
+
+* **Custom User Model & Authentication:** Extended the built-in Django User model (`CustomUser`). Implemented distinct user groups (Admin, Sitter, Client) with specific UI and View-level permissions.
+* **Frontend Business Logic:** Critical administrative functionalities are accessible via the main UI (not just Django Admin), protected by `LoginRequiredMixin` and `UserPassTestMixin` to prevent unauthorized URL access.
+* **RESTful APIs:** Integrated **Django REST Framework (DRF)** featuring serializers and API views (`ListAPIView`, `RetrieveAPIView`) for Sitter data, secured with `IsAuthenticatedOrReadOnly`.
+* **Asynchronous Processing:** Configured **Celery** and **Redis** for background task execution (e.g., sending email notifications upon application status changes).
+* **Cloud Storage & Static Files:** Utilized **Cloudinary** for scalable profile image hosting and **WhiteNoise** for static file management in production.
+* **Automated Testing:** Developed **29 automated tests** (Unit and Integration) covering models, forms, and view access restrictions.
+* **Full CRUD:** Implemented for at least 3 models (`Application`, `Inquiry`, `Sitter`).
+* **Deployment:** Fully deployed and configured on **Render.com** utilizing PostgreSQL.
+* **User Groups & Permissions:** Defined multiple user groups (Admin, Sitter, Client) in the Django Admin panel with distinct permissions and access control.
+
+---
+
 ## Application Architecture
 
-The project is structured into five Django apps with clear separation of responsibilities:
+The project is structured into six Django apps with clear separation of responsibilities:
 
-- **common** – Homepage, static pages, contact form, shared components
-- **services** – Service categorisation (`ServiceGroup` model)
-- **sitters** – Sitter profiles - list and detail views
-- **inquiries** – Hiring requests made by clients
-- **recruitment** – Job applications for new sitters
+- **common** – Homepage, custom error pages (400, 403, 404, 500), contact form, and shared UI components.
+- **services** – Service categorisation (`ServiceGroup` model).
+- **sitters** – Sitter profiles, DRF endpoints, update views, and M2M Language relations.
+- **inquiries** – Hiring requests made by clients and received by sitters.
+- **recruitment** – Job applications for new sitters with Admin tracking.
+- **accounts** – Custom user model, registration, login, logout, and profile management.
+---
+## Security
 
-The architecture follows:
-
-- Strong cohesion and loose coupling
-- Clear separation of concerns
-- Reusable template components
-- Clean URL structure and consistent navigation
+- CSRF protection enabled via Django middleware
+- Protection against SQL injection through Django ORM
+- XSS protection via template auto-escaping
+- Sensitive data stored in environment variables (.env)
+- Role-based access control enforced via View-level permissions
 
 ---
 
@@ -79,83 +107,89 @@ The architecture follows:
 The application uses PostgreSQL as its database management system.
 
 ### Models
-
-- `Sitter` – Core professional profile
-- `ServiceGroup` – Categorises service types
-- `Inquiry` – Client request tied to a specific sitter
-- `Application` – Recruitment application
+- `Sitter` – Core professional profile.
+- `ServiceGroup` – Categorises service types.
+- `Inquiry` – Client request tied to a specific sitter.
+- `Application` – Recruitment application.
+- `Language` – Spoken languages for sitters.
+- `CustomUser` – Extends Django's `AbstractUser` for custom authentication.
 
 ### Relationships
-
-- **Many-to-Many:** `Sitter` ↔ `ServiceGroup`
-- **Many-to-One (ForeignKey):** `Inquiry` → `Sitter`
-
-The models include:
-
-- Custom validation logic
-- Meaningful field constraints
-- Encapsulated business logic methods
-- Proper use of Django model best practices
+- **Many-to-Many:** `Sitter` ↔ `ServiceGroup`, `Sitter` ↔ `Language`
+- **Many-to-One (ForeignKey):** `Inquiry` → `Sitter`, `Inquiry` → `CustomUser` (Client), `Application` → `CustomUser`
 
 ---
 
 ## Features
 
 ### CRUD Functionality
-
-Full CRUD operations are implemented for:
-
-- `Application`
-- `Inquiry`
+Full CRUD operations are implemented via Class-Based Views (making up over 90% of views) for:
+- `Application` (Manageable by Applicant/Admin)
+- `Inquiry` (Manageable by Client/Admin)
+- `Sitter` Profile (Updateable by the Sitter, Deletable by Admin)
 
 Each delete operation includes a confirmation step.
 
----
-
 ### Forms & Validation
+The project includes 7 fully validated forms (`ApplicationForm`, `InquiryForm`, `ContactForm`, `SitterUpdateForm`, `CustomUserCreationForm`, `CustomUserChangeForm`, `CustomAuthenticationForm`).
 
-The project includes:
-
-- `ApplicationForm`
-- `InquiryForm`
-- `ContactForm`
-
-Features:
-
-- Custom server-side validation
+**Validation Features:**
+- Custom server-side validation (e.g., name constraints, phone number length).
 - Field-level and form-level validation
-- Customised labels and placeholders
-- Disabled/read-only fields (e.g., email field during update)
+- Disabled/read-only fields (e.g., email field disabled during updates, hourly rate strictly admin-controlled).
+- Customised labels, help texts, and placeholders.
 - Excluded unnecessary fields
 - User-friendly validation messages
 
 ---
 
 ### Views
-
-The project uses a mix of:
-
-- Class-Based Views (`ListView`, `DetailView`, `CreateView`, `UpdateView`, `DeleteView`)
-- Function-Based Views where appropriate
-
-The views properly:
-
-- Handle GET and POST requests
-- Validate forms before saving
-- Redirect after successful submissions
+The project handles business logic primarily through **Class-Based Views (over 90% CBVs)** including `ListView`, `DetailView`, `CreateView`, `UpdateView`, and `DeleteView`.
+- Properly handles GET and POST requests.
+- Validates forms before saving and redirects upon successful submissions.
+- Restricts access using robust View-level permissions (`LoginRequiredMixin`, `UserPassesTestMixin`).
 
 ---
 
 ### Templates
+- **15+ templates** using the Django Template Engine.
+- **10+ dynamic templates** displaying and filtering database data.
+- Base template with inheritance and reusable partials (navigation, footer).
+- Conditional rendering based on user authentication status and roles.
+- Custom error pages (400, 403, 404, 500).
+- No orphan pages; all pages are seamlessly accessible through navigation links.
+- Fully responsive layout powered by Bootstrap.
+- All pages are accessible through navigation links (no orphan pages)
+- Consistent navigation menu and footer across all templates
 
-- 15 templates using Django Template Engine
-- 7+ dynamic templates displaying database data
-- Base template with inheritance
-- Reusable partial templates (nav and footer)
-- Custom 404 error page
-- No orphan pages
-- URL-based filtering functionality
-- Bootstrap-based responsive layout
+---
+
+## Live Testing Instructions
+
+To evaluate the core business logic of the application, please follow these step-by-step testing scenarios using the provided test accounts:
+
+### Scenario 1: End-to-End Recruitment & Admin Capabilities
+1. **Submit Application:** Create an account and log in as a regular user(sitter), click "Присъедини се към нас" and submit a new Sitter application.
+2. **Admin Review:** Log in as **Admin**. Navigate to the "Кандидатури (HR)" dashboard. 
+3. **Status Change & Profile Generation:** Edit the application you just created and change its status to "Approved/Hired". This triggers a Django signal that automatically generates a Sitter profile.
+4. **Verify Sitter:** Go to the Sitters list page and verify the new sitter now appears.
+5. **Admin Deletion:** As the Admin, click the "Delete" button on the newly created sitter's profile to test the restricted SitterDeleteView. Verify the custom confirmation page routes correctly.
+
+### Scenario 2: Client & Sitter Interactions (Inquiries)
+1. **Client Action:** Log in as **Client**. Go to a Sitter's profile and click "Наеми" (Hire) to test the Create Inquiry functionality.
+2. **Sitter Action:** Log out, then log in as the **Sitter**. Check your dashboard by clicking 'Запитвания' to view the received inquiry.
+3. **Profile Update:** While logged in as the Sitter, test the Update functionality by editing your own profile details (Note: the hourly rate is read-only for sitters but can be changed from the admin user).
+
+### Scenario 3: Data Validation
+Submit an application or inquiry form with intentional mistakes to observe custom server-side validation errors (`clean()` logic):
+* **Application Form:** Enter a phone number shorter than 10 digits, or write a short bio under 20 characters.
+* **Sitter Profile Update:** Log in as a Sitter, edit your profile, and enter a negative number for "Experience (in years)" or a bio shorter than 30 characters.
+
+### Scenario 4: Custom Error Pages & Access Control (400, 403, 404, 500)
+The application handles custom error routing for better UX. To test them:
+* **403 Forbidden:** Log in as a **Client**. Go to the Sitters list and click on any Sitter to view their profile. Look at the URL in your browser (it will look something like `/sitters/1/`). Manually type `edit/` or `delete/` at the very end of that URL (e.g., `/sitters/1/edit/`) and press Enter. You will be successfully blocked by the `UserPassTestMixin` and shown the custom 403 page.
+* **404 Not Found:** Navigate to a non-existing URL (e.g., `/non-existing-page/`). The custom 404 template will display.
+* *(Custom 400 Bad Request and 500 Internal Server Error pages are also fully implemented and will display automatically if server-level issues occur).*
 
 ---
 
@@ -196,11 +230,15 @@ Create a `.env` file in the project root directory and add your local PostgreSQL
 
 ```env
 DEBUG=True
+SECRET_KEY=your-local-secret-key
 DB_NAME=sitterhub_db
 DB_USER=postgres
-DB_PASSWORD=your_password
+DB_PASSWORD=your_postgres_password
 DB_HOST=localhost
 DB_PORT=5432
+CLOUDINARY_URL=cloudinary://your_api_key_here
+CELERY_BROKER_URL=redis://localhost:6379/0 
+
 ```
 
 ## Running the Application
@@ -242,52 +280,9 @@ To test the dynamic features of the site, you will need to populate the database
 
 ---
 
-## Testing Instructions
-
-### Data Validation Testing
-Submit an application form with the following intentional mistakes:
-* A phone number shorter than 10 digits
-* A name containing numeric characters
-
-*Observe the custom server-side validation errors triggered by the `clean()` logic.*
-
-### CRUD Testing - Applications (Кандидатури)
-1. You can click on the **"Кандидатствай тук"** on the homepage, or **"Присъедини се към нас"** on the nav bar to create an application for a sitter.
-2. Navigate to the **"Кандидатури (Beta)"** dashboard from the main navigation.
-3. Edit an existing application and observe:
-   * The visually disabled email field (cannot be edited).
-   * The application status update dropdown menu.
-4. Delete an application to verify the custom confirmation page routes correctly.
-
-### CRUD Testing - Inquiries (Запитвания)
-1. Go to the sitter's list page and click **"Изпрати запитване"** to test the Create functionality. You can also go to a specific Sitter's profile and click **"Наеми"**(their name)
-2. Navigate to the **"Запитвания (Beta)"** dashboard from the main navigation to view the list.
-3. Edit an existing inquiry to test the Update functionality.
-4. Delete an inquiry to verify the custom confirmation page routes correctly.
-
-### Custom 404 Page Testing
-By default, the project runs with:
-```env
-DEBUG=True
-```
-When `DEBUG=True`, Django displays its default technical debug error page instead of the custom `404.html` template. 
-
-**To test the custom 404 page:**
-1. Temporarily update your `.env` file:
-   ```env
-   DEBUG=False
-   ```
-2. Restart the development server in your terminal.
-3. Navigate to a non-existing URL, for example: [http://127.0.0.1:8000/non-existing-page/](http://127.0.0.1:8000/non-existing-page/)
-4. The custom SitterHub 404 template should now be displayed.
-
-*(Note: After testing, you may switch `DEBUG=True` again for development purposes).*
-
----
-
 ## Contributors
 **Mario Kostadinov** – Developer  
-*Developed as an individual project for the Django Basics Regular Exam at SoftUni.*
+*Developed as an individual project for the Django Advanced Regular Exam at SoftUni.*
 
 ## License
 This project is licensed under the MIT License.  

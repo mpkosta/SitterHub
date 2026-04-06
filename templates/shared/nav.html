@@ -1,3 +1,5 @@
+{% load user_tags %}
+
 <style>
     .custom-navbar {
         background: linear-gradient(135deg, #084298 0%, #0d6efd 100%);
@@ -39,11 +41,11 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'application-list' %}">
-                            {% if user.is_staff %}Кандидатури (HR){% else %}Моите кандидатури{% endif %}
+                            {% if request.user|has_group:"Admin" %}Кандидатури (HR){% else %}Моите кандидатури{% endif %}
                         </a>
                     </li>
 
-                    {% if request.user.sitter_profile %}
+                    {% if request.user|has_group:"Sitter" %}
                         <li class="nav-item">
                             <a class="nav-link btn btn-warning text-dark px-3 ms-2 fw-bold rounded-pill" href="{% url 'sitter-edit' request.user.sitter_profile.pk %}">
                                 ⚙️ Редактирай профил

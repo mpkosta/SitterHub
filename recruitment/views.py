@@ -38,6 +38,11 @@ class ApplicationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         obj = self.get_object()
         return self.request.user == obj.user or self.request.user.is_staff
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         response = super().form_valid(form)
 

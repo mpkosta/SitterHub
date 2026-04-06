@@ -85,5 +85,10 @@ class ApplicationEditForm(ApplicationForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         self.fields["email"].disabled = True
+
+        if self.user and not self.user.is_staff:
+            if 'application_status' in self.fields:
+                self.fields['application_status'].disabled = True
