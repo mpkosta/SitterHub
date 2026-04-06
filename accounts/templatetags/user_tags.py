@@ -6,6 +6,4 @@ register = template.Library()
 def has_group(user, group_name):
     if not user.is_authenticated:
         return False
-    if user.is_staff or user.is_superuser:
-        return True
     return user.groups.filter(name=group_name).exists()

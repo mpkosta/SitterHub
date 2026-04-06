@@ -41,7 +41,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'application-list' %}">
-                            {% if request.user|has_group:"Admin" %}Кандидатури (HR){% else %}Моите кандидатури{% endif %}
+                            {% if request.user.is_staff %}Кандидатури (HR){% else %}Моите кандидатури{% endif %}
                         </a>
                     </li>
 
