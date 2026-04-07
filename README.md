@@ -141,6 +141,9 @@ The project includes 7 fully validated forms (`ApplicationForm`, `InquiryForm`, 
 - Excluded unnecessary fields
 - User-friendly validation messages
 
+### Technical Note on the Contact Form
+The global **Contact Form** (accessible via the main navigation) is designed for general agency inquiries. To facilitate easy testing without requiring live SMTP server credentials, the project utilizes Django's `console.EmailBackend`. When a user submits a contact form, the email is successfully processed by Django and printed directly to the server console/logs instead of an actual inbox. *(Note: Sitter-specific hiring requests are handled differently via the `Inquiry` model and are saved directly to the database and user dashboards).*
+
 ---
 
 ### Views
